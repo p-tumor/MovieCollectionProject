@@ -81,54 +81,7 @@ public class MovieCollection
 
     private void searchTitles()
     {
-        System.out.print("Enter a tital search term: ");
-        String searchTerm = scanner.nextLine();
-
-        // prevent case sensitivity
-        searchTerm = searchTerm.toLowerCase();
-
-        // arraylist to hold search results
-        ArrayList<Movie> results = new ArrayList<Movie>();
-
-        // search through ALL movies in collection
-        for (int i = 0; i < movies.size(); i++)
-        {
-            String movieTitle = movies.get(i).getTitle();
-            movieTitle = movieTitle.toLowerCase();
-
-            if (movieTitle.indexOf(searchTerm) != -1)
-            {
-                //add the Movie objest to the results list
-                results.add(movies.get(i));
-            }
-        }
-
-        // sort the results by title
-        sortResults(results);
-
-        // now, display them all to the user
-        for (int i = 0; i < results.size(); i++)
-        {
-            String title = results.get(i).getTitle();
-
-            // this will print index 0 as choice 1 in the results list; better for user!
-            int choiceNum = i + 1;
-
-            System.out.println("" + choiceNum + ". " + title);
-        }
-
-        System.out.println("Which movie would you like to learn more about?");
-        System.out.print("Enter number: ");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine();
-
-        Movie selectedMovie = results.get(choice - 1);
-
-        displayMovieInfo(selectedMovie);
-
-        System.out.println("\n ** Press Enter to Return to Main Menu **");
-        scanner.nextLine();
+        search(1);
     }
 
     private void sortResults(ArrayList<Movie> listToSort)
@@ -164,12 +117,34 @@ public class MovieCollection
 
     private void searchCast()
     {
+        System.out.print("Enter the cast member's name: ");
+        String searchTerm = new Scanner(System.in).nextLine();
+        ArrayList<String> names = new ArrayList<>();
+        for(Movie m:movies){
+            String[] cast = m.getCast().split("\\|");
+            for(String c: cast) {
+                if (c.toLowerCase().contains(searchTerm)) names.add(c);
+            }
+        }
+        removeDuplicates(names);
+        for (int i = 0; i < names.size(); i++)
+        {
+            String name = names.get(i);
 
+            // this will print index 0 as choice 1 in the results list; better for user!
+            int choiceNum = i + 1;
+
+            System.out.println("" + choiceNum + ". " + name);
+        }
+        System.out.println("Which cast member would you like to learn more about?");
+        System.out.print("Enter number: ");
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
     }
 
     private void searchKeywords()
     {
-
+        search(2);
     }
 
     private void listGenres()
@@ -224,4 +199,68 @@ public class MovieCollection
             System.out.println("Unable to access " + exception.getMessage());
         }
     }
+    private void search(int x){
+        if (x == 1)System.out.print("Enter a title search term: ");
+        if (x == 2)System.out.print("Enter the key search term: ");
+        String searchTerm = scanner.nextLine();
+
+        // prevent case sensitivity
+        searchTerm = searchTerm.toLowerCase();
+
+        // arraylist to hold search results
+        ArrayList<Movie> results = new ArrayList<Movie>();
+
+        // search through ALL movies in collection
+        for (Movie movie : movies) {
+            String movieThing = null;
+            if (x == 1) movieThing = movie.getTitle();
+            if (x == 2) movieThing = movie.getKeywords();
+            movieThing = movieThing.toLowerCase();
+
+            if (movieThing.contains(searchTerm)) {
+                //add the Movie objest to the results list
+                results.add(movie);
+            }
+        }
+
+        // sort the results by title
+        sortResults(results);
+
+        // now, display them all to the user
+        for (int i = 0; i < results.size(); i++)
+        {
+            String title = results.get(i).getTitle();
+
+            // this will print index 0 as choice 1 in the results list; better for user!
+            int choiceNum = i + 1;
+
+            System.out.println("" + choiceNum + ". " + title);
+        }
+
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        Movie selectedMovie = results.get(choice - 1);
+
+        displayMovieInfo(selectedMovie);
+
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
+    }
+    private void removeDuplicates(ArrayList<String> list)
+    {
+        for (int i = 0; i < list.size(); i++) {
+            String wordToCheck = list.get(i);
+            for (int x = i+1; x < list.size(); x++){
+                if(list.get(x).equals(wordToCheck)){
+                    list.remove(x);
+                    x--;
+                }
+            }
+        }
+    }
+
 }
