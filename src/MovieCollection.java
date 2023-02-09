@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class MovieCollection
@@ -117,29 +118,7 @@ public class MovieCollection
 
     private void searchCast()
     {
-        System.out.print("Enter the cast member's name: ");
-        String searchTerm = new Scanner(System.in).nextLine();
-        ArrayList<String> names = new ArrayList<>();
-        for(Movie m:movies){
-            String[] cast = m.getCast().split("\\|");
-            for(String c: cast) {
-                if (c.toLowerCase().contains(searchTerm)) names.add(c);
-            }
-        }
-        removeDuplicates(names);
-        for (int i = 0; i < names.size(); i++)
-        {
-            String name = names.get(i);
-
-            // this will print index 0 as choice 1 in the results list; better for user!
-            int choiceNum = i + 1;
-
-            System.out.println("" + choiceNum + ". " + name);
-        }
-        System.out.println("Which cast member would you like to learn more about?");
-        System.out.print("Enter number: ");
-        System.out.println("Which movie would you like to learn more about?");
-        System.out.print("Enter number: ");
+        search(1);
     }
 
     private void searchKeywords()
@@ -202,6 +181,7 @@ public class MovieCollection
     private void search(int x){
         if (x == 1)System.out.print("Enter a title search term: ");
         if (x == 2)System.out.print("Enter the key search term: ");
+        if (x == 3)System.out.print("Enter the key search term: ");
         String searchTerm = scanner.nextLine();
 
         // prevent case sensitivity
@@ -215,6 +195,7 @@ public class MovieCollection
             String movieThing = null;
             if (x == 1) movieThing = movie.getTitle();
             if (x == 2) movieThing = movie.getKeywords();
+            if (x == 3) movieThing = movie.getGenres();
             movieThing = movieThing.toLowerCase();
 
             if (movieThing.contains(searchTerm)) {
